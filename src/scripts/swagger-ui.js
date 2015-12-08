@@ -161,14 +161,8 @@ angular
 									} else if (resp.schema.type === 'string') {
 										delete resp.schema;
 									}
-									if (code === '200' || code === '201') {
-										operation.responseClass = resp;
-										operation.responseClass.display = 1;
-										operation.responseClass.status = code;
-										delete operation.responses[code];
-									} else {
-										operation.hasResponses = true;
-									}
+
+									operation.hasResponses = true;
 								} else {
 									operation.hasResponses = true;
 								}
