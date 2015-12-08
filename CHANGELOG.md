@@ -1,3 +1,10 @@
+### 0.2.0 (2015-12-08)
+
+#### Features
+
+* Remove default error codes
+* check 'anyOf' for inheritance
+
 ### 0.1.9 (2015-08-11)
 
 #### Features
