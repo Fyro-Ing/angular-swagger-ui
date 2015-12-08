@@ -161,14 +161,8 @@ angular
 									} else if (resp.schema.type === 'string') {
 										delete resp.schema;
 									}
-									if (code === '200' || code === '201') {
-										operation.responseClass = resp;
-										operation.responseClass.display = 1;
-										operation.responseClass.status = code;
-										delete operation.responses[code];
-									} else {
-										operation.hasResponses = true;
-									}
+
+									operation.hasResponses = true;
 								} else {
 									operation.hasResponses = true;
 								}
@@ -490,63 +484,82 @@ angular
 
 		var countInLine = 0;
 
+		var generateProperties = this.generateProperties = function(swagger, schema, buffer, submodels) {
+
+			function isRequired(item, name) {
+				return item.required && item.required.indexOf(name) !== -1;
+			}
+
+			for (var propertyName in schema.properties) {
+				var property = schema.properties[propertyName];
+				buffer.push('<div class="pad"><strong>', propertyName, '</strong> (<span class="type">');
+				// build type
+				if (property.properties) {
+					var name = 'Inline Model' + countInLine++;
+					buffer.push(name);
+					submodels.push(generateModel(swagger, property, name));
+				} else if (property.$ref) {
+					buffer.push(getClassName(property));
+					submodels.push(generateModel(swagger, property));
+				} else if (property.type === 'array') {
+					buffer.push('Array[');
+					if (property.items.properties) {
+						var name = 'Inline Model' + countInLine++;
+						buffer.push(name);
+						submodels.push(generateModel(swagger, property, name));
+					} else if (property.items.$ref) {
+						buffer.push(getClassName(property.items));
+						submodels.push(generateModel(swagger, property.items));
+					} else {
+						buffer.push(getType(property.items));
+					}
+					buffer.push(']');
+				} else {
+					buffer.push(getType(property));
+				}
+				buffer.push('</span>');
+				// is required ?
+				if (!isRequired(schema, propertyName)) {
+					buffer.push(', ', '<em>optional</em>');
+				}
+				buffer.push(')');
+				// has description
+				if (property.description) {
+					buffer.push(': ', property.description);
+				}
+				// is enum
+				if (property.enum) {
+					buffer.push(' = ', angular.toJson(property.enum).replace(/,/g, ' or '));
+				}
+				buffer.push(',</div>');
+			}
+		};
+
 		/**
 		 * generates object's model
 		 */
 		var generateModel = this.generateModel = function(swagger, schema, modelName) {
 			var model = '';
 
-			function isRequired(item, name) {
-				return item.required && item.required.indexOf(name) !== -1;
-			}
-
 			if (schema.properties) {
 				modelName = modelName || ('Inline Model' + countInLine++);
 				var buffer = ['<div><strong>' + modelName + ' {</strong>'],
 					submodels = [];
 
-				for (var propertyName in schema.properties) {
-					var property = schema.properties[propertyName];
-					buffer.push('<div class="pad"><strong>', propertyName, '</strong> (<span class="type">');
-					// build type
-					if (property.properties) {
-						var name = 'Inline Model' + countInLine++;
-						buffer.push(name);
-						submodels.push(generateModel(swagger, property, name));
-					} else if (property.$ref) {
-						buffer.push(getClassName(property));
-						submodels.push(generateModel(swagger, property));
-					} else if (property.type === 'array') {
-						buffer.push('Array[');
-						if (property.items.properties) {
-							var name = 'Inline Model' + countInLine++;
-							buffer.push(name);
-							submodels.push(generateModel(swagger, property, name));
-						} else if (property.items.$ref) {
-							buffer.push(getClassName(property.items));
-							submodels.push(generateModel(swagger, property.items));
-						} else {
-							buffer.push(getType(property.items));
-						}
-						buffer.push(']');
-					} else {
-						buffer.push(getType(property));
+
+				if(schema.anyOf){
+					//generateProperties(swagger, schema, buffer, submodels);
+					buffer.push('<div class="pad"><strong>### anyOf</strong> [');
+					for(var index in schema.anyOf) {
+						var anyOf = schema.anyOf[index];
+						var sub = generateModel(swagger, anyOf);
+						buffer.push(sub);
 					}
-					buffer.push('</span>');
-					// is required ?
-					if (!isRequired(schema, propertyName)) {
-						buffer.push(', ', '<em>optional</em>');
-					}
-					buffer.push(')');
-					// has description
-					if (property.description) {
-						buffer.push(': ', property.description);
-					}
-					// is enum
-					if (property.enum) {
-						buffer.push(' = ', angular.toJson(property.enum).replace(/,/g, ' or '));
-					}
+
 					buffer.push(',</div>');
+				}
+				else {
+					generateProperties(swagger, schema, buffer, submodels);
 				}
 				buffer.pop();
 				buffer.push('</div>');
