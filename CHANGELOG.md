@@ -1,3 +1,9 @@
+### 0.2.1 (2015-12-09)
+
+#### Features
+
+* Generate json from anyOf
+
 ### 0.2.0 (2015-12-08)
 
 #### Features
