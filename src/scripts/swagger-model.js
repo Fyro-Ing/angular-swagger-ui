@@ -48,7 +48,7 @@ angular
 		 */
 		function getSampleObj(swagger, schema) {
 			var sample;
-			if (schema.default || schema.example){
+			if (schema.default || schema.example) {
 				sample = schema.default || schema.example;
 			} else if (schema.properties) {
 				sample = {};
@@ -66,7 +66,17 @@ angular
 					sample = objCache[schema.$ref];
 				}
 			} else if (schema.type === 'array') {
-				sample = [getSampleObj(swagger, schema.items)];
+				//check if sub object have anyOf property
+				var def;
+				if ((schema.items.$ref && (def = swagger.definitions[getClassName(schema.items)])) && (def && def.anyOf)) {
+					sample = [];
+					for (var index in def.anyOf) {
+						var anyOf = def.anyOf[index];
+						sample.push(getSampleObj(swagger, anyOf));
+					}
+				} else {
+					sample = [getSampleObj(swagger, schema.items)];
+				}
 			} else if (schema.type === 'object') {
 				sample = {};
 			} else {
