@@ -1,3 +1,9 @@
+### 0.2.2 (2015-12-14)
+
+#### Features
+
+* Resize Textarea enabled
+
 ### 0.2.1 (2015-12-09)
 
 #### Features
