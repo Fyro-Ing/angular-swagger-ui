@@ -66,16 +66,12 @@ angular
 					sample = objCache[schema.$ref];
 				}
 			} else if (schema.type === 'array') {
-				//check if sub object have anyOf property
-				var def;
-				if ((schema.items.$ref && (def = swagger.definitions[getClassName(schema.items)])) && (def && def.anyOf)) {
-					sample = [];
-					for (var index in def.anyOf) {
-						var anyOf = def.anyOf[index];
-						sample.push(getSampleObj(swagger, anyOf));
-					}
-				} else {
-					sample = [getSampleObj(swagger, schema.items)];
+				sample = [getSampleObj(swagger, schema.items)];
+			} else if (schema.hasOwnProperty('allOf')) {
+				sample = {};
+				for (var index in schema.allOf) {
+					var allOf = schema.allOf[index];
+					sample =_.extend(sample,(getSampleObj(swagger, allOf)));
 				}
 			} else if (schema.type === 'object') {
 				sample = {};
@@ -192,21 +188,8 @@ angular
 				var buffer = ['<div><strong>' + modelName + ' {</strong>'],
 					submodels = [];
 
+				generateProperties(swagger, schema, buffer, submodels);
 
-				if(schema.anyOf){
-					//generateProperties(swagger, schema, buffer, submodels);
-					buffer.push('<div class="pad"><strong>### anyOf</strong> [');
-					for(var index in schema.anyOf) {
-						var anyOf = schema.anyOf[index];
-						var sub = generateModel(swagger, anyOf);
-						buffer.push(sub);
-					}
-
-					buffer.push(',</div>');
-				}
-				else {
-					generateProperties(swagger, schema, buffer, submodels);
-				}
 				buffer.pop();
 				buffer.push('</div>');
 				buffer.push('<strong>}</strong>');
@@ -240,6 +223,26 @@ angular
 				model = buffer.join('');
 			} else if (schema.type === 'object') {
 				model = '<strong>Inline Model {<br>}</strong>';
+			} else if (schema.allOf) {
+				modelName = modelName || ('Inline Model' + countInLine++);
+				var buffer = ['<div><strong>' + modelName + ' {</strong>'],
+					submodels = [];
+
+				//generateProperties(swagger, schema, buffer, submodels);
+				buffer.push('<div class="pad"><strong>### allOf</strong> [');
+				for(var index in schema.allOf) {
+					var allOf = schema.allOf[index];
+					var sub = generateModel(swagger, allOf, allOf.description);
+					buffer.push(sub);
+				}
+
+				buffer.push(',</div>');
+
+				buffer.pop();
+				buffer.push('</div>');
+				buffer.push('<strong>}</strong>');
+				buffer.push(submodels.join(''), '</div>');
+				model = buffer.join('');
 			}
 			return model;
 		};

@@ -1,3 +1,7 @@
+### 0.3.0 (2016-01-21)
+
+* Add support inheritance Model (discriminator / allOf)
+
 ### 0.2.2 (2015-12-14)
 
 #### Features

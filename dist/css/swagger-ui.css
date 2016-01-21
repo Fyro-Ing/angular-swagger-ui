@@ -164,9 +164,6 @@
 .swagger-ui .operation .content .parameters .model-schema pre:hover {
   background-color: #ffd;
 }
-.swagger-ui .operation .content .parameters .name {
-  width: 12%;
-}
 .swagger-ui .operation .content .parameters .value {
   width: 30%;
 }
