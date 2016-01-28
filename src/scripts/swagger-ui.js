@@ -119,7 +119,7 @@ angular
 						operation.id = operationId;
 						form[operationId] = {
 							contentType: operation.consumes && operation.consumes.length === 1 ? operation.consumes[0] : 'application/json',
-							responseType: operation.produces && operation.produces.length > 0 ? operation.produces[0] : 'application/json',
+							responseType: operation.produces && operation.produces.length > 0 ? operation.produces.join(',') : 'application/json',
 						};
 						operation.httpMethod = httpMethod;
 						operation.path = path;

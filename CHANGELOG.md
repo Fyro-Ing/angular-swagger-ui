@@ -1,4 +1,4 @@
-### 0.4.1 (2016-01-28)
+### 0.4.2 (2016-01-28)
 
 * Add support to content-type 'application/pdf'
 * Add support to content-type 'text/html'
