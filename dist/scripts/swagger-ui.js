@@ -287,10 +287,6 @@ angular
 				}
 			}
 
-			if(headers('content-type') === 'text/html'){
-				data = $sce.trustAsHtml(data);
-			}
-
 			deferred.resolve({
 				url: config.url + query,
 				response: {
