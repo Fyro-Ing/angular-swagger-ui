@@ -8,7 +8,7 @@
 
 angular
 	.module('swaggerUi')
-	.service('swaggerClient', ['$q', '$http', function($q, $http) {
+	.service('swaggerClient', ['$q', '$http', '$sce', function($q, $http, $sce) {
 
 		function formatResult(deferred, data, status, headers, config) {
 			var query = '';
@@ -21,12 +21,18 @@ angular
 					query = '?' + parts.join('&');
 				}
 			}
+
+			if(headers('content-type') === 'text/html'){
+				data = $sce.trustAsHtml(data);
+			}
+
 			deferred.resolve({
 				url: config.url + query,
 				response: {
-					body: data ? (angular.isString(data) ? data : angular.toJson(data, true)) : 'no content',
+					body: data ? (angular.isString(data) || data instanceof Blob ? data : angular.toJson(data, true)) : 'no content',
 					status: status,
-					headers: angular.toJson(headers(), true)
+					headers: angular.toJson(headers(), true),
+					contentType: headers('content-type')
 				}
 			});
 		}
@@ -92,6 +98,17 @@ angular
 			// apply transform
 			if (typeof transform === 'function') {
 				transform(request);
+			}
+
+			if(operation.produces && operation.produces.indexOf('application/pdf') !== -1){
+				request.responseType = 'arraybuffer';
+				request.transformResponse = function (data, headers) {
+					var result = data;
+					if (data && 'application/pdf' === headers('content-type')) {
+						result = new Blob([data], {type: 'application/pdf', name: 'contract.pdf'});
+					}
+					return result;
+				};
 			}
 
 			// send request

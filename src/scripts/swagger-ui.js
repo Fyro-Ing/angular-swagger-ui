@@ -22,8 +22,8 @@ angular
 			}
 		};
 	})
-	.controller('swaggerUiController', ['$scope', '$http', '$sce', '$location', 'swaggerModel', 'swaggerClient',
-		function($scope, $http, $sce, $location, swaggerModel, swaggerClient) {
+	.controller('swaggerUiController', ['$scope', '$http', '$sce', '$location', '$window', 'swaggerModel', 'swaggerClient',
+		function($scope, $http, $sce, $location, $window, swaggerModel, swaggerClient) {
 
 			var swagger;
 
@@ -119,7 +119,7 @@ angular
 						operation.id = operationId;
 						form[operationId] = {
 							contentType: operation.consumes && operation.consumes.length === 1 ? operation.consumes[0] : 'application/json',
-							responseType: 'application/json'
+							responseType: operation.produces && operation.produces.length > 0 ? operation.produces[0] : 'application/json',
 						};
 						operation.httpMethod = httpMethod;
 						operation.path = path;
@@ -237,6 +237,12 @@ angular
 					.then(function(result) {
 						operation.loading = false;
 						operation.explorerResult = result;
+
+						if(result.response.body instanceof Blob){
+							var blob = result.response.body;
+							var fileURL = URL.createObjectURL(blob);
+							$window.open(fileURL);
+						}
 					});
 			};
 

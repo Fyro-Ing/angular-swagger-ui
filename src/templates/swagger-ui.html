@@ -166,16 +166,17 @@
 			                	<a class="hide-try-it" ng-if="op.explorerResult&&!op.hideExplorerResult" ng-click="op.hideExplorerResult=true" href="javascript:;">hide response</a>
 		                	</div>
 	                	</form>
-	                	<div ng-if="op.explorerResult" ng-show="!op.hideExplorerResult">
-	                		<h5>request URL</h5>
-	                		<pre ng-bind="op.explorerResult.url"></pre>
-	                		<h5>response body</h5>
-	                		<pre ng-bind="op.explorerResult.response.body"></pre>
-	                		<h5>response code</h5>
-	                		<pre ng-bind="op.explorerResult.response.status"></pre>
-	                		<h5>response headers</h5>
-	                		<pre ng-bind="op.explorerResult.response.headers"></pre>
-	                	</div>
+						<div ng-if="op.explorerResult" ng-show="!op.hideExplorerResult">
+							<h5>request URL</h5>
+							<pre ng-bind="op.explorerResult.url"></pre>
+							<h5>response body</h5>
+							<pre ng-show="op.explorerResult.response.contentType !== 'text/html'" ng-bind="op.explorerResult.response.body"></pre>
+							<pre ng-show="op.explorerResult.response.contentType === 'text/html'" ng-bind-html="op.explorerResult.response.body"></pre>
+							<h5>response code</h5>
+							<pre ng-bind="op.explorerResult.response.status"></pre>
+							<h5>response headers</h5>
+							<pre ng-bind="op.explorerResult.response.headers"></pre>
+						</div>
 	                </div>
 	            </li>
 	        </ul>
