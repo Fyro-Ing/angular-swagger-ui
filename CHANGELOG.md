@@ -1,8 +1,8 @@
-### 0.4.2 (2016-01-28)
+### 0.4.3 (2016-01-28)
 
 * Add support to content-type 'application/pdf'
 * Add support to content-type 'text/html'
-
+* resize pre tag html
 
 ### 0.3.0 (2016-01-21)
 
