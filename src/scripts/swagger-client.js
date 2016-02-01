@@ -102,6 +102,8 @@ angular
 					var result = data;
 					if (data && 'application/pdf' === headers('content-type')) {
 						result = new Blob([data], {type: 'application/pdf', name: 'contract.pdf'});
+					} else {
+						result = String.fromCharCode.apply(null, new Uint8Array(data));
 					}
 					return result;
 				};

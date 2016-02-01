@@ -1,3 +1,7 @@
+### 0.5.0 (2016-02-01)
+
+* On request content-type 'application/pdf', if response content-type is not the same, convert to string 
+
 ### 0.4.3 (2016-01-28)
 
 * Add support to content-type 'application/pdf'
