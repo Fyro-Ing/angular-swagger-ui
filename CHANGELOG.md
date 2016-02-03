@@ -1,3 +1,7 @@
+### 0.5.1 (2016-02-03)
+
+* Fix decode arraybuffer to utf-8 with TextDecoder support
+
 ### 0.5.0 (2016-02-01)
 
 * On request content-type 'application/pdf', if response content-type is not the same, convert to string 

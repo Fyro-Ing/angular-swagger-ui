@@ -33,6 +33,15 @@ angular
 			});
 		}
 
+		function decodeToUtf8(data) {
+			var encoding = 'utf-8';
+			// The TextDecoder interface is documented at http://encoding.spec.whatwg.org/#interface-textdecoder
+			var dataView = new DataView(data);
+			// The TextDecoder interface is documented at http://encoding.spec.whatwg.org/#interface-textdecoder
+			var decoder = new TextDecoder(encoding);
+			return decoder.decode(dataView);
+		}
+
 		this.send = function(swagger, operation, values, transform) {
 			var deferred = $q.defer(),
 				query = {},
@@ -102,6 +111,8 @@ angular
 					var result = data;
 					if (data && 'application/pdf' === headers('content-type')) {
 						result = new Blob([data], {type: 'application/pdf', name: 'contract.pdf'});
+					} else if ('TextDecoder' in window) {
+						result = decodeToUtf8(data);
 					} else {
 						result = String.fromCharCode.apply(null, new Uint8Array(data));
 					}
