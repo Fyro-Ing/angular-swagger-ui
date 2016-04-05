@@ -18,7 +18,8 @@ angular
 				url: '=',
 				apiExplorer: '=',
 				errorHandler: '=',
-				apiExplorerTransform: '='
+				apiExplorerTransform: '=',
+				transformApiResponse: "="
 			}
 		};
 	})
@@ -45,6 +46,11 @@ angular
 				// apply transform headers
 				if (typeof $scope.apiExplorerTransform === 'function') {
 					$scope.apiExplorerTransform(request);
+				}
+
+				// apply transform headers
+				if (typeof $scope.transformApiResponse === 'function') {
+					request.transformResponse = $scope.transformApiResponse;
 				}
 
 				// send request

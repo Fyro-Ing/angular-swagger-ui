@@ -1,3 +1,7 @@
+### 0.6.0 (2016-04-05)
+
+* Add transform api response to modify basePath, etc ...
+
 ### 0.5.1 (2016-02-03)
 
 * Fix decode arraybuffer to utf-8 with TextDecoder support
