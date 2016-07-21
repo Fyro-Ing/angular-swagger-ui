@@ -15,7 +15,7 @@
 		</div>
 	</div>
 	<ul class="list-unstyled endpoints">
-	    <li ng-repeat="api in resources" class="endpoint" ng-class="{active:api.open}">
+	    <li ng-repeat="api in resources" class="endpoint" ng-class="{active:api.open}" ng-show="{{api.show === undefined || api.show}}">
 	        <div class="clearfix">
 		        <ul class="list-inline pull-left endpoint-heading">
 		            <li>

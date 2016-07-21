@@ -1,3 +1,7 @@
+### 0.7.0 (2016-07-20)
+
+* Add ng-show on endpoint with '#show variable'
+
 ### 0.6.0 (2016-04-05)
 
 * Add transform api response to modify basePath, etc ...
