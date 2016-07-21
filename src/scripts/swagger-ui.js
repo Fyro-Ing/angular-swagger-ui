@@ -35,8 +35,8 @@ angular
             }
         };
     })
-	.controller('swaggerUiController', ['$scope', '$http', '$sce', '$location', '$window', 'swaggerModel', 'swaggerClient',
-		function($scope, $http, $sce, $location, $window, swaggerModel, swaggerClient) {
+	.controller('swaggerUiController', ['$scope', '$http', '$sce', '$location', '$window', 'swaggerModel', 'swaggerClient', 'Scopes',
+		function($scope, $http, $sce, $location, $window, swaggerModel, swaggerClient, Scopes) {
 
 			Scopes.store('swaggerUiController', $scope);
 
