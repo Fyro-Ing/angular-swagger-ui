@@ -23,8 +23,22 @@ angular
 			}
 		};
 	})
+    .factory('Scopes', function () {
+        var mem = {};
+
+        return {
+            store: function (key, value) {
+                mem[key] = value;
+            },
+            get: function (key) {
+                return mem[key];
+            }
+        };
+    })
 	.controller('swaggerUiController', ['$scope', '$http', '$sce', '$location', '$window', 'swaggerModel', 'swaggerClient',
 		function($scope, $http, $sce, $location, $window, swaggerModel, swaggerClient) {
+
+			Scopes.store('swaggerUiController', $scope);
 
 			var swagger;
 
