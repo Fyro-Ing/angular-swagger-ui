@@ -396,9 +396,9 @@ angular
 					var result = data;
 					if (data && 'application/pdf' === headers('content-type')) {
 						result = new Blob([data], {type: 'application/pdf', name: 'contract.pdf'});
-					} else if ('TextDecoder' in window) {
+					} else if (data && 'TextDecoder' in window) {
 						result = decodeToUtf8(data);
-					} else {
+					} else if (data) {
 						result = String.fromCharCode.apply(null, new Uint8Array(data));
 					}
 					return result;

@@ -1,4 +1,8 @@
-### 0.7.0 (2016-07-20)
+### 0.7.4 (2016-09-29)
+
+* fix no data
+
+### 0.7.0->0.7.3 (2016-07-20)
 
 * Add ng-show on endpoint with '#show variable'
 
