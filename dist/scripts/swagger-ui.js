@@ -101,6 +101,37 @@ angular
 			});
 
 			/**
+			 * compute path and operation parameters
+			 */
+			function computeParameters(swagger, pathParameters, operation) {
+				var i, j, k, l,
+					operationParameters = operation.parameters || [],
+					parameters = [].concat(operationParameters),
+					found,
+					pathParameter,
+					operationParameter;
+
+				for (i = 0, l = pathParameters.length; i < l; i++) {
+					found = false;
+					pathParameter = swaggerModel.resolveReference(swagger, pathParameters[i]);
+
+					for (j = 0, k = operationParameters.length; j < k; j++) {
+						operationParameter = swaggerModel.resolveReference(swagger, operationParameters[j]);
+						if (pathParameter.name === operationParameter.name && pathParameter.in === operationParameter.in) {
+							// overriden parameter
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						// add path parameter to operation ones
+						parameters.push(pathParameter);
+					}
+				}
+				return parameters;
+			}
+
+			/**
 			 * parses swagger description to ease HTML generation
 			 */
 			function parseV2() {
@@ -115,7 +146,9 @@ angular
 					map = {},
 					form = {},
 					resources = [],
-					openPath = $location.search().open;
+					openPath = $location.search().open,
+					pathObject,
+					pathParameters;
 
 				// parse resources
 				if (!swagger.tags) {
@@ -133,8 +166,12 @@ angular
 				}
 				// parse operations
 				for (var path in swagger.paths) {
-					for (var httpMethod in swagger.paths[path]) {
-						var operation = swagger.paths[path][httpMethod];
+					pathObject = swagger.paths[path];
+					pathParameters = pathObject.parameters || [];
+					delete pathObject.parameters;
+
+					for (var httpMethod in pathObject) {
+						var operation = pathObject[httpMethod];
 						//TODO manage 'deprecated' operations ?
 						operation.id = operationId;
 						form[operationId] = {
@@ -144,7 +181,7 @@ angular
 						operation.httpMethod = httpMethod;
 						operation.path = path;
 						// parse operation's parameters
-						for (var j = 0, params = operation.parameters || [], k = params.length; j < k; j++) {
+						for (var j = 0, params = operation.parameters = computeParameters(swagger, pathParameters, operation), k = params.length; j < k; j++) {
 							//TODO manage 'collectionFormat' (csv, multi etc.) ?
 							//TODO manage constraints (pattern, min, max etc.) ?
 							var param = params[j];
@@ -435,6 +472,20 @@ angular
 		 * model cache to avoid generating the same one multiple times
 		 */
 		var modelCache = {};
+
+		/**
+		 * retrieves object definition
+		 */
+		var resolveReference = this.resolveReference = function(swagger, object) {
+			if (object.$ref) {
+				var parts = object.$ref.replace('#/', '').split('/');
+				object = swagger;
+				for (var i = 0, j = parts.length; i < j; i++) {
+					object = object[parts[i]];
+				}
+			}
+			return object;
+		};
 
 		/**
 		 * determines a property type

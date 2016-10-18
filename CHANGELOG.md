@@ -1,3 +1,7 @@
+### 0.8.0 (2016-10-18)
+
+* Add common parameters in operations
+
 ### 0.7.4 (2016-09-29)
 
 * fix no data

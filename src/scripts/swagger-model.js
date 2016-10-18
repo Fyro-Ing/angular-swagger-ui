@@ -21,6 +21,20 @@ angular
 		var modelCache = {};
 
 		/**
+		 * retrieves object definition
+		 */
+		var resolveReference = this.resolveReference = function(swagger, object) {
+			if (object.$ref) {
+				var parts = object.$ref.replace('#/', '').split('/');
+				object = swagger;
+				for (var i = 0, j = parts.length; i < j; i++) {
+					object = object[parts[i]];
+				}
+			}
+			return object;
+		};
+
+		/**
 		 * determines a property type
 		 */
 		var getType = this.getType = function(item) {
