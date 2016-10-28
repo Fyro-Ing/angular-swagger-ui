@@ -1,3 +1,8 @@
+### 0.8.1 (2016-10-28)
+
+* Fix check enum inline
+* Fix propertyname
+
 ### 0.8.0 (2016-10-18)
 
 * Add common parameters in operations

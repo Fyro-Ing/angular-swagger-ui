@@ -604,18 +604,16 @@ angular
 				buffer.push('<div class="pad"><strong>', propertyName, '</strong> (<span class="type">');
 				// build type
 				if (property.properties) {
-					var name = 'Inline Model' + countInLine++;
-					buffer.push(name);
-					submodels.push(generateModel(swagger, property, name));
+					buffer.push(propertyName);
+					submodels.push(generateModel(swagger, property, propertyName));
 				} else if (property.$ref) {
 					buffer.push(getClassName(property));
 					submodels.push(generateModel(swagger, property));
 				} else if (property.type === 'array') {
 					buffer.push('Array[');
 					if (property.items.properties) {
-						var name = 'Inline Model' + countInLine++;
-						buffer.push(name);
-						submodels.push(generateModel(swagger, property, name));
+						buffer.push(propertyName);
+						submodels.push(generateModel(swagger, property, propertyName));
 					} else if (property.items.$ref) {
 						buffer.push(getClassName(property.items));
 						submodels.push(generateModel(swagger, property.items));
@@ -709,6 +707,15 @@ angular
 				buffer.push('</div>');
 				buffer.push('<strong>}</strong>');
 				buffer.push(submodels.join(''), '</div>');
+				model = buffer.join('');
+			} else if(schema.enum){
+				var buffer =  ['<div><strong>' + modelName + '</strong>(<span class="type">' + schema.type + '</span>) <strong>{</strong>'];
+				buffer.push('<div class="pad">');
+				buffer.push(schema.description + ' = ');
+				buffer.push(angular.toJson(schema.enum).replace(/,/g, ' or '));
+				buffer.push('</div>');
+				buffer.push('<strong>}</strong></div>');
+
 				model = buffer.join('');
 			}
 			return model;
