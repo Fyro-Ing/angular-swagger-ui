@@ -122,8 +122,7 @@ angular
 
 			// send request
 			$http(request)
-				.success(callback)
-				.error(callback);
+				.then(callback, callback);
 
 			return deferred.promise;
 		};

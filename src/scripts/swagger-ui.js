@@ -69,11 +69,11 @@ angular
 
 				// send request
 				$http(request)
-					.success(function(data /*, status, headers, config*/ ) {
+					.then(function(data /*, status, headers, config*/ ) {
 						$scope.loading = false;
 						callback(data);
-					})
-					.error(function(data, status /*, headers, config*/ ) {
+					},
+                    function(data, status /*, headers, config*/ ) {
 						$scope.loading = false;
 						if (notifyError) {
 							$scope.errorHandler(data, status);

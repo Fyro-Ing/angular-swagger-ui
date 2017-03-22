@@ -1,3 +1,6 @@
+### 1.0.0 (2017-03-22)
+* update dependencies
+
 ### 0.8.1 (2016-10-28)
 
 * Fix check enum inline
