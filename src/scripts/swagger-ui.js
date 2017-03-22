@@ -69,14 +69,14 @@ angular
 
 				// send request
 				$http(request)
-					.then(function(data /*, status, headers, config*/ ) {
+					.then(function(result) {
 						$scope.loading = false;
-						callback(data);
+						callback(result);
 					},
-                    function(data, status /*, headers, config*/ ) {
+                    function(result) {
 						$scope.loading = false;
 						if (notifyError) {
-							$scope.errorHandler(data, status);
+							$scope.errorHandler(result.data, result.status);
 						}
 					});
 			}
@@ -89,9 +89,9 @@ angular
 				if (url && url !== '') {
 					// load Swagger description
 					var notifyError = typeof $scope.errorHandler === 'function';
-					get(url, function(data) {
-						swagger = data;
-						if (data.swagger === '2.0') {
+					get(url, function(result) {
+						swagger = result.data;
+						if (swagger.swagger === '2.0') {
 							parseV2(swagger);
 						} else if (notifyError) {
 							$scope.errorHandler('unsupported swagger version', '415');

@@ -10,12 +10,12 @@ angular
 	.module('swaggerUi')
 	.service('swaggerClient', ['$q', '$http', '$sce', function($q, $http, $sce) {
 
-		function formatResult(deferred, data, status, headers, config) {
+		function formatResult(deferred, result) {
 			var query = '';
-			if (config.params) {
+			if (result.config.params) {
 				var parts = [];
-				for (var key in config.params) {
-					parts.push(key + '=' + encodeURIComponent(config.params[key]));
+				for (var key in result.config.params) {
+					parts.push(key + '=' + encodeURIComponent(result.config.params[key]));
 				}
 				if (parts.length > 0) {
 					query = '?' + parts.join('&');
@@ -23,12 +23,12 @@ angular
 			}
 
 			deferred.resolve({
-				url: config.url + query,
+				url: result.config.url + query,
 				response: {
-					body: data ? (angular.isString(data) || data instanceof Blob ? data : angular.toJson(data, true)) : 'no content',
-					status: status,
-					headers: angular.toJson(headers(), true),
-					contentType: headers('content-type')
+					body: result.data ? (angular.isString(result.data) || result.data instanceof Blob ? result.data : angular.toJson(result.data, true)) : 'no content',
+					status: result.status,
+					headers: angular.toJson(result.headers(), true),
+					contentType: result.headers('content-type')
 				}
 			});
 		}
@@ -96,8 +96,8 @@ angular
 					data: values.body,
 					params: query
 				},
-				callback = function(data, status, headers, config) {
-					formatResult(deferred, data, status, headers, config);
+				callback = function(result) {
+					formatResult(deferred, result);
 				};
 
 			// apply transform

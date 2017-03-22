@@ -69,14 +69,14 @@ angular
 
 				// send request
 				$http(request)
-					.then(function(data /*, status, headers, config*/ ) {
+					.then(function(result) {
 						$scope.loading = false;
-						callback(data);
+						callback(result);
 					},
-                    function(data, status /*, headers, config*/ ) {
+                    function(result) {
 						$scope.loading = false;
 						if (notifyError) {
-							$scope.errorHandler(data, status);
+							$scope.errorHandler(result.data, result.status);
 						}
 					});
 			}
@@ -89,9 +89,9 @@ angular
 				if (url && url !== '') {
 					// load Swagger description
 					var notifyError = typeof $scope.errorHandler === 'function';
-					get(url, function(data) {
-						swagger = data;
-						if (data.swagger === '2.0') {
+					get(url, function(result) {
+						swagger = result.data;
+						if (swagger.swagger === '2.0') {
 							parseV2(swagger);
 						} else if (notifyError) {
 							$scope.errorHandler('unsupported swagger version', '415');
@@ -332,12 +332,12 @@ angular
 	.module('swaggerUi')
 	.service('swaggerClient', ['$q', '$http', '$sce', function($q, $http, $sce) {
 
-		function formatResult(deferred, data, status, headers, config) {
+		function formatResult(deferred, result) {
 			var query = '';
-			if (config.params) {
+			if (result.config.params) {
 				var parts = [];
-				for (var key in config.params) {
-					parts.push(key + '=' + encodeURIComponent(config.params[key]));
+				for (var key in result.config.params) {
+					parts.push(key + '=' + encodeURIComponent(result.config.params[key]));
 				}
 				if (parts.length > 0) {
 					query = '?' + parts.join('&');
@@ -345,12 +345,12 @@ angular
 			}
 
 			deferred.resolve({
-				url: config.url + query,
+				url: result.config.url + query,
 				response: {
-					body: data ? (angular.isString(data) || data instanceof Blob ? data : angular.toJson(data, true)) : 'no content',
-					status: status,
-					headers: angular.toJson(headers(), true),
-					contentType: headers('content-type')
+					body: result.data ? (angular.isString(result.data) || result.data instanceof Blob ? result.data : angular.toJson(result.data, true)) : 'no content',
+					status: result.status,
+					headers: angular.toJson(result.headers(), true),
+					contentType: result.headers('content-type')
 				}
 			});
 		}
@@ -418,8 +418,8 @@ angular
 					data: values.body,
 					params: query
 				},
-				callback = function(data, status, headers, config) {
-					formatResult(deferred, data, status, headers, config);
+				callback = function(result) {
+					formatResult(deferred, result);
 				};
 
 			// apply transform
