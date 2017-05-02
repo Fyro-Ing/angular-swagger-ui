@@ -8,7 +8,7 @@
 
 angular
 	.module('swaggerUi')
-	.service('swaggerModel', function() {
+	.service('swaggerModel', function($httpParamSerializerJQLike) {
 
 		/**
 		 * sample object cache to avoid generating the same one multiple times
