@@ -128,15 +128,25 @@ angular
 		/**
 		 * generates a sample JSON string (request body or response body)
 		 */
-		this.generateSampleJson = function(swagger, schema) {
-			var json,
-				obj = getSampleObj(swagger, schema);
+        this.generateSampleJson = function (swagger, schema, contentTypes) {
+            var json,
+                obj = getSampleObj(swagger, schema),
+                contentType;
 
-			if (obj) {
-				json = angular.toJson(obj, true);
-			}
-			return json;
-		};
+            // if contentTypes is array, get first
+            if (contentTypes && angular.isArray(contentTypes)) {
+                contentType = contentTypes[0] || 'application/json';
+            } else {
+                contentType = contentTypes || 'application/json';
+            }
+
+            if (obj && 'application/x-www-form-urlencoded' === contentType) {
+                json = $httpParamSerializerJQLike(obj);
+            } else {
+                json = angular.toJson(obj, true);
+            }
+            return json;
+        };
 
 		var countInLine = 0;
 

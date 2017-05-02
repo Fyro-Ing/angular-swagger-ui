@@ -196,7 +196,7 @@ angular
 							form[operationId][param.name] = param.default || '';
 							if (param.schema) {
 								param.schema.display = 1; // display schema
-								param.schema.json = swaggerModel.generateSampleJson(swagger, param.schema);
+								param.schema.json = swaggerModel.generateSampleJson(swagger, param.schema, operation.consumes);
 								param.schema.model = $sce.trustAsHtml(swaggerModel.generateModel(swagger, param.schema));
 							}
 							if (param.in === 'body') {
@@ -211,7 +211,7 @@ angular
 								var resp = operation.responses[code];
 								resp.description = $sce.trustAsHtml(resp.description);
 								if (resp.schema) {
-									resp.schema.json = swaggerModel.generateSampleJson(swagger, resp.schema);
+									resp.schema.json = swaggerModel.generateSampleJson(swagger, resp.schema, operation.produces);
 									if (resp.schema.type === 'object' || resp.schema.type === 'array' || resp.schema.$ref) {
 										resp.display = 1; // display schema
 										resp.schema.model = $sce.trustAsHtml(swaggerModel.generateModel(swagger, resp.schema));

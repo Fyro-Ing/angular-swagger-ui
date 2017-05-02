@@ -1,3 +1,6 @@
+### 1.1.0 (2017-05-02)
+* add model schema for url-encoded content-type
+
 ### 1.0.1 (2017-03-22)
 * update dependencies
 
