@@ -8,7 +8,7 @@
 
 angular
 	.module('swaggerUi')
-	.service('swaggerModel', function($httpParamSerializerJQLike) {
+	.service('swaggerModel', ['$httpParamSerializerJQLike', function($httpParamSerializerJQLike) {
 
 		/**
 		 * sample object cache to avoid generating the same one multiple times
@@ -286,4 +286,4 @@ angular
 			modelCache = {};
 		};
 
-	});
+	}]);

@@ -460,7 +460,7 @@ angular
 
 angular
 	.module('swaggerUi')
-	.service('swaggerModel', function($httpParamSerializerJQLike) {
+	.service('swaggerModel', ['$httpParamSerializerJQLike', function($httpParamSerializerJQLike) {
 
 		/**
 		 * sample object cache to avoid generating the same one multiple times
@@ -738,7 +738,7 @@ angular
 			modelCache = {};
 		};
 
-	});
+	}]);
 angular.module('swaggerUiTemplates', ['templates/swagger-ui.html']);
 
 angular.module('templates/swagger-ui.html', []).run(['$templateCache', function ($templateCache) {
