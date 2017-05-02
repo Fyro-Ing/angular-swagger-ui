@@ -196,7 +196,7 @@ angular
 							form[operationId][param.name] = param.default || '';
 							if (param.schema) {
 								param.schema.display = 1; // display schema
-								param.schema.json = swaggerModel.generateSampleJson(swagger, param.schema);
+								param.schema.json = swaggerModel.generateSampleJson(swagger, param.schema, operation.consumes);
 								param.schema.model = $sce.trustAsHtml(swaggerModel.generateModel(swagger, param.schema));
 							}
 							if (param.in === 'body') {
@@ -211,7 +211,7 @@ angular
 								var resp = operation.responses[code];
 								resp.description = $sce.trustAsHtml(resp.description);
 								if (resp.schema) {
-									resp.schema.json = swaggerModel.generateSampleJson(swagger, resp.schema);
+									resp.schema.json = swaggerModel.generateSampleJson(swagger, resp.schema, operation.produces);
 									if (resp.schema.type === 'object' || resp.schema.type === 'array' || resp.schema.$ref) {
 										resp.display = 1; // display schema
 										resp.schema.model = $sce.trustAsHtml(swaggerModel.generateModel(swagger, resp.schema));
@@ -580,15 +580,25 @@ angular
 		/**
 		 * generates a sample JSON string (request body or response body)
 		 */
-		this.generateSampleJson = function(swagger, schema) {
-			var json,
-				obj = getSampleObj(swagger, schema);
+        this.generateSampleJson = function (swagger, schema, contentTypes) {
+            var json,
+                obj = getSampleObj(swagger, schema),
+                contentType;
 
-			if (obj) {
-				json = angular.toJson(obj, true);
-			}
-			return json;
-		};
+            // if contentTypes is array, get first
+            if (contentTypes && angular.isArray(contentTypes)) {
+                contentType = contentTypes[0] || 'application/json';
+            } else {
+                contentType = contentTypes || 'application/json';
+            }
+
+            if (obj && 'application/x-www-form-urlencoded' === contentType) {
+                json = $httpParamSerializerJQLike(obj);
+            } else {
+                json = angular.toJson(obj, true);
+            }
+            return json;
+        };
 
 		var countInLine = 0;
 
