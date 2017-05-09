@@ -69,12 +69,15 @@ angular
 						}
 						break;
 					case 'formData':
-						values.body = values.body || new FormData();
 						if (!!value) {
 							if (param.type === 'file') {
+                                values.body = values.body || new FormData();
 								values.contentType = undefined; // make browser defining it by himself
-							}
-							values.body.append(param.name, value);
+                                values.body.append(param.name, value);
+                            } else {
+                                values.body = values.body || {};
+                                values.body[param.name] = value;
+                            }
 						}
 						break;
                     case 'body':

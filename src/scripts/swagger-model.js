@@ -133,18 +133,7 @@ angular
                 obj = getSampleObj(swagger, schema),
                 contentType;
 
-            // if contentTypes is array, get first
-            if (contentTypes && angular.isArray(contentTypes)) {
-                contentType = contentTypes[0] || 'application/json';
-            } else {
-                contentType = contentTypes || 'application/json';
-            }
-
-            if (obj && 'application/x-www-form-urlencoded' === contentType) {
-                json = $httpParamSerializerJQLike(obj);
-            } else {
-                json = angular.toJson(obj, true);
-            }
+			json = angular.toJson(obj, true);
             return json;
         };
 

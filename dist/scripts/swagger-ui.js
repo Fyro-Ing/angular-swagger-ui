@@ -391,12 +391,15 @@ angular
 						}
 						break;
 					case 'formData':
-						values.body = values.body || new FormData();
 						if (!!value) {
 							if (param.type === 'file') {
+                                values.body = values.body || new FormData();
 								values.contentType = undefined; // make browser defining it by himself
-							}
-							values.body.append(param.name, value);
+                                values.body.append(param.name, value);
+                            } else {
+                                values.body = values.body || {};
+                                values.body[param.name] = value;
+                            }
 						}
 						break;
                     case 'body':
@@ -585,18 +588,7 @@ angular
                 obj = getSampleObj(swagger, schema),
                 contentType;
 
-            // if contentTypes is array, get first
-            if (contentTypes && angular.isArray(contentTypes)) {
-                contentType = contentTypes[0] || 'application/json';
-            } else {
-                contentType = contentTypes || 'application/json';
-            }
-
-            if (obj && 'application/x-www-form-urlencoded' === contentType) {
-                json = $httpParamSerializerJQLike(obj);
-            } else {
-                json = angular.toJson(obj, true);
-            }
+			json = angular.toJson(obj, true);
             return json;
         };
 
