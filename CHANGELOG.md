@@ -1,3 +1,6 @@
+### 1.1.7 (2017-05-11)
+* add response headers
+
 ### 1.1.6 (2017-05-09)
 * add model schema for url-encoded content-type
 

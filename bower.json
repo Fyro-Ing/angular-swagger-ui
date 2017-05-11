@@ -1,7 +1,7 @@
 {
     "name": "angular-swagger-ui-fork",
     "license": "MIT",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "description": "AngularJS implementation of Swagger UI",
     "homepage": "https://github.com/Fyro-Ing/angular-swagger-ui",
     "keywords": [

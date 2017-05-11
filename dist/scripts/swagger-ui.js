@@ -333,7 +333,7 @@ angular
 	.service('swaggerClient', ['$q', '$http', '$sce', function($q, $http, $sce) {
 
 		function formatResult(deferred, result) {
-			var query = '';
+			var query = '', headers = angular.extend({}, result.config.headers,result.headers());
 			if (result.config.params) {
 				var parts = [];
 				for (var key in result.config.params) {
@@ -349,7 +349,7 @@ angular
 				response: {
 					body: result.data ? (angular.isString(result.data) || result.data instanceof Blob ? result.data : angular.toJson(result.data, true)) : 'no content',
 					status: result.status,
-					headers: angular.toJson(result.headers(), true),
+					headers: angular.toJson(headers, true),
 					contentType: result.headers('content-type')
 				}
 			});
