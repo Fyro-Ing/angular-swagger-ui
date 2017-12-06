@@ -25,7 +25,7 @@ angular
 			deferred.resolve({
 				url: result.config.url + query,
 				response: {
-					body: result.data ? (angular.isString(result.data) || result.data instanceof Blob ? result.data : angular.toJson(result.data, true)) : 'no content',
+					body: angular.isDefined(result.data) ? (angular.isString(result.data) || result.data instanceof Blob ? result.data : angular.toJson(result.data, true)) : 'no content',
 					status: result.status,
 					headers: angular.toJson(headers, true),
 					contentType: result.headers('content-type')

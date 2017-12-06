@@ -1,3 +1,6 @@
+### 1.1.9 (2017-12-06)
+* Fix result data
+
 ### 1.1.8 (2017-05-11)
 * add response headers
 
