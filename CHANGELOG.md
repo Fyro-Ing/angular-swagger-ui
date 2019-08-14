@@ -1,3 +1,5 @@
+### 1.1.10 (2019-08-14)
+* multiple select
 ### 1.1.9 (2017-12-06)
 * Fix result data
 

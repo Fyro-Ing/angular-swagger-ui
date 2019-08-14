@@ -90,7 +90,7 @@
 		                						<div ng-if="apiExplorer">
 		                							<div ng-if="param.in!=='body'" ng-switch="param.subtype">
 			                							<input ng-switch-when="file" type="file" file-input ng-model="form[op.id][param.name]" id="param{{param.id}}" placeholder="{{param.required?'(required)':''}}" ng-required="param.required">
-			                							<select ng-switch-when="enum" ng-model="form[op.id][param.name]" id="param{{param.id}}">
+			                							<select multiple ng-switch-when="enum" ng-model="form[op.id][param.name]" id="param{{param.id}}">
 			                								<option ng-repeat="value in param.enum" value="{{value}}" ng-bind="value+(param.default===value?' (default)':'')" ng-selected="param.default===value"></option>
 			                							</select>
 			                							<input ng-switch-default type="text" ng-model="form[op.id][param.name]" id="param{{param.id}}" placeholder="{{param.required?'(required)':''}}" ng-required="param.required">
