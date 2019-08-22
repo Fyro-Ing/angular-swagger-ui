@@ -337,7 +337,15 @@ angular
 			if (result.config.params) {
 				var parts = [];
 				for (var key in result.config.params) {
-					parts.push(key + '=' + encodeURIComponent(result.config.params[key]));
+					if (Array.isArray(result.config.params[key])) {
+						for (var val in result.config.params[key]) {
+							parts.push(
+								key + '=' + encodeURIComponent(result.config.params[key][val]));
+						}
+					} else {
+						parts.push(
+							key + '=' + encodeURIComponent(result.config.params[key]));
+					}
 				}
 				if (parts.length > 0) {
 					query = '?' + parts.join('&');
@@ -453,6 +461,7 @@ angular
 		};
 
 	}]);
+
 /*
  * Orange angular-swagger-ui - v0.1.5
  *
